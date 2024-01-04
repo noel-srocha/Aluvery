@@ -1,4 +1,4 @@
-package dev.noelsrocha.aluvery.ui.components
+package dev.noelsrocha.aluvery.ui.components.shared
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -18,14 +18,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun SearchTextField(searchText: String, onSearchChange: (String) -> Unit) {
+fun SearchTextField(label: String, placeholder: String? = null, searchText: String, onSearchChange: (String) -> Unit) {
     OutlinedTextField(
-        label = { Text(text = "Produto") },
-        leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Ícone de Pesquisa") },
+        label = { Text(text = label) },
+        leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search Icon") },
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 16.dp, end = 16.dp, top = 16.dp),
-        placeholder = { Text(text = "O que você procura?") },
+        placeholder = { Text(text = placeholder ?: label) },
         onValueChange = onSearchChange,
         shape = RoundedCornerShape(100),
         value = searchText,
@@ -38,6 +38,8 @@ fun SearchTextFieldPreview() {
     var testSearch by remember { mutableStateOf("") }
 
     SearchTextField(
+        label = "Search",
+        placeholder = "Search something",
         searchText = testSearch,
         onSearchChange = { testSearch = it },
     )

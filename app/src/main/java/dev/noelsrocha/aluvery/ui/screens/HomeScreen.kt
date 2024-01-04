@@ -16,37 +16,38 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import dev.noelsrocha.aluvery.data.sampleCandies
+import dev.noelsrocha.aluvery.data.sampleDrinks
 import dev.noelsrocha.aluvery.data.sampleProducts
 import dev.noelsrocha.aluvery.data.sampleSections
 import dev.noelsrocha.aluvery.models.Product
 import dev.noelsrocha.aluvery.ui.components.ProductItemCardExtended
 import dev.noelsrocha.aluvery.ui.components.ProductsSection
-import dev.noelsrocha.aluvery.ui.components.SearchTextField
+import dev.noelsrocha.aluvery.ui.components.shared.SearchTextField
+import dev.noelsrocha.aluvery.ui.states.HomeSreenUIState
 import dev.noelsrocha.aluvery.ui.theme.AluveryTheme
 
 @Composable
-fun HomeScreen(sections: Map<String, List<Product>> = emptyMap()) {
-    var search by remember { mutableStateOf("") }
-
-    val filteredProducts = remember(search) {
-        if (search.isNotBlank()) {
-            sampleProducts.filter {
-                it.name.contains(search, ignoreCase = true) ||
-                        it.description?.contains(search, ignoreCase = true) ?: false
-            }
-        } else emptyList()
-    }
+fun HomeScreen(
+    state: HomeSreenUIState = HomeSreenUIState()
+) {
+    val filteredProducts = state.filteredProducts
 
     Column {
-        SearchTextField(searchText = search, onSearchChange = { search = it })
+        SearchTextField(
+            label = "Produtos",
+            placeholder = "O que você procura?",
+            searchText = state.searchText,
+            onSearchChange = state.onSearchChange
+        )
 
         LazyColumn(
             Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = PaddingValues(vertical = 16.dp)
         ) {
-            if (search.isBlank()) {
-                for ((title, products) in sections) {
+            if (state.isShowSections()) {
+                for ((title, products) in state.sections) {
                     item {
                         ProductsSection(title, products = products)
                     }
@@ -63,12 +64,43 @@ fun HomeScreen(sections: Map<String, List<Product>> = emptyMap()) {
     }
 }
 
+@Composable
+fun HomeScreen(products: List<Product>) {
+    val sections = mapOf(
+        "Todos os Produtos" to products,
+        "Promoções" to sampleDrinks + sampleCandies,
+        "Doces" to sampleCandies,
+        "Bebidas" to sampleDrinks
+    )
+
+    var search by remember { mutableStateOf("") }
+
+    val filteredProducts = remember(products, search) {
+        if (search.isNotBlank()) {
+            sampleProducts.filter(containsInNameOrDescription(search)) +
+                    products.filter(containsInNameOrDescription(search))
+        } else
+            emptyList()
+    }
+
+    val state = remember(products, search) {
+        HomeSreenUIState(sections, filteredProducts, search, onSearchChange = { search = it })
+    }
+
+    HomeScreen(state)
+}
+
+fun containsInNameOrDescription(searchText: String) = {
+    product: Product -> product.name.contains(searchText, ignoreCase = true) ||
+    product.description?.contains(searchText, ignoreCase = true) ?: false
+}
+
 @Preview
 @Composable
 private fun HomeScreenPreview() {
     AluveryTheme {
         Surface {
-            HomeScreen(sampleSections)
+            HomeScreen(HomeSreenUIState(sampleSections))
         }
     }
 }
