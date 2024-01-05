@@ -15,10 +15,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -31,12 +29,34 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import dev.noelsrocha.aluvery.R
-import dev.noelsrocha.aluvery.models.Product
-import java.math.BigDecimal
-import java.text.DecimalFormat
+import dev.noelsrocha.aluvery.ui.states.ProductFormUIState
+import dev.noelsrocha.aluvery.ui.viewmodels.ProductFormScreenViewModel
 
 @Composable
-fun ProductFormScreen(onSaveClick: (product: Product) -> Unit = {}) {
+fun ProductFormScreen(
+    viewModel: ProductFormScreenViewModel,
+    onSaveClick: () -> Unit = {}
+) {
+    val state by viewModel.uiState.collectAsState()
+    ProductFormScreen(
+        state,
+        onSaveClick = {
+            viewModel.saveProduct()
+            onSaveClick()
+        }
+    )
+}
+
+@Composable
+fun ProductFormScreen(
+    state: ProductFormUIState = ProductFormUIState(),
+    onSaveClick: () -> Unit = {}
+) {
+    val productImageUrl = state.productImageUrl
+    val productName = state.productName
+    val productDescription = state.productDescription
+    val productPrice = state.productPrice
+
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier
@@ -46,18 +66,9 @@ fun ProductFormScreen(onSaveClick: (product: Product) -> Unit = {}) {
     ) {
         Spacer(modifier = Modifier)
 
-        Text("Criando do Produto", fontSize = 24.sp, fontWeight = FontWeight(700))
+        Text("Creating Product", fontSize = 24.sp, fontWeight = FontWeight(700))
 
-        var productImageUrl by remember { mutableStateOf("") }
-        var productName by remember { mutableStateOf("") }
-        var productDescription by remember { mutableStateOf("") }
-        var productPrice by remember { mutableStateOf("") }
-
-        val formatter = remember {
-            DecimalFormat("#,##")
-        }
-
-        if (productImageUrl.isNotBlank()) {
+        if (state.isShowPreview) {
             AsyncImage(
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
@@ -75,9 +86,9 @@ fun ProductFormScreen(onSaveClick: (product: Product) -> Unit = {}) {
                 keyboardType = KeyboardType.Uri,
                 imeAction = ImeAction.Next
             ),
-            label = { Text("Url da Imagem") },
+            label = { Text("Image URL") },
             value = productImageUrl,
-            onValueChange = { productImageUrl = it }
+            onValueChange = state.onProductImageUrlChange
         )
 
         TextField(
@@ -86,9 +97,9 @@ fun ProductFormScreen(onSaveClick: (product: Product) -> Unit = {}) {
                 imeAction = ImeAction.Next,
                 capitalization = KeyboardCapitalization.Words
             ),
-            label = { Text("Nome") },
+            label = { Text("Name") },
             value = productName,
-            onValueChange = { productName = it }
+            onValueChange = state.onProductNameChange
         )
 
         TextField(
@@ -97,16 +108,9 @@ fun ProductFormScreen(onSaveClick: (product: Product) -> Unit = {}) {
                 keyboardType = KeyboardType.Decimal,
                 imeAction = ImeAction.Next,
             ),
-            label = { Text("Preço") },
+            label = { Text("Price") },
             value = productPrice,
-            onValueChange = {
-                try {
-                    productPrice = formatter.format(BigDecimal(it))
-                } catch(ex: IllegalArgumentException) {
-                    if (it.isBlank())
-                        productPrice = it
-                }
-            },
+            onValueChange = state.onProductPriceChange,
         )
 
         TextField(
@@ -114,33 +118,18 @@ fun ProductFormScreen(onSaveClick: (product: Product) -> Unit = {}) {
                 .fillMaxWidth()
                 .height(150.dp),
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
-            label = { Text("Descrição") },
+            label = { Text("Description") },
             value = productDescription,
-            onValueChange = { productDescription = it }
+            onValueChange = state.onProductDescriptionChange
         )
 
         Button(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp),
-            onClick = {
-                val convertedPrice = try {
-                    BigDecimal(productPrice)
-                } catch (Exception: NumberFormatException) {
-                    BigDecimal.ZERO
-                }
-
-                val product = Product(
-                    name = productName,
-                    description = productDescription,
-                    price = convertedPrice,
-                    image = productImageUrl
-                )
-
-                onSaveClick(product)
-            }
+            onClick = onSaveClick
         ) {
-            Text(text = "Salvar", fontSize = 18.sp, fontWeight = FontWeight(700))
+            Text(text = "Save", fontSize = 18.sp, fontWeight = FontWeight(700))
         }
 
         Spacer(modifier = Modifier)
@@ -150,5 +139,12 @@ fun ProductFormScreen(onSaveClick: (product: Product) -> Unit = {}) {
 @Preview(showBackground = true)
 @Composable
 fun ProductFormScreenPreview() {
-    ProductFormScreen()
+    ProductFormScreen(
+        state = ProductFormUIState(
+            productImageUrl = "Test Url",
+            productName = "Name Test",
+            productPrice = "123",
+            productDescription = "Description Test"
+        )
+    )
 }

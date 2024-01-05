@@ -15,7 +15,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.noelsrocha.aluvery.data.sampleCandies
-import dev.noelsrocha.aluvery.data.sampleProducts
 import dev.noelsrocha.aluvery.models.Product
 import dev.noelsrocha.aluvery.ui.theme.AluveryTheme
 
