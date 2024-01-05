@@ -18,20 +18,20 @@ import dev.noelsrocha.aluvery.data.sampleSections
 import dev.noelsrocha.aluvery.ui.components.ProductItemCardExtended
 import dev.noelsrocha.aluvery.ui.components.ProductsSection
 import dev.noelsrocha.aluvery.ui.components.shared.SearchTextField
-import dev.noelsrocha.aluvery.ui.states.HomeSreenUIState
+import dev.noelsrocha.aluvery.ui.states.HomeScreenUIState
 import dev.noelsrocha.aluvery.ui.theme.AluveryTheme
 import dev.noelsrocha.aluvery.ui.viewmodels.HomeScreenViewModel
 
 @Composable
 fun HomeScreen(
-    state: HomeSreenUIState = HomeSreenUIState()
+    state: HomeScreenUIState = HomeScreenUIState()
 ) {
     val filteredProducts = state.filteredProducts
 
     Column {
         SearchTextField(
-            label = "Produtos",
-            placeholder = "O que você procura?",
+            label = "Products",
+            placeholder = "What are you looking for?",
             searchText = state.searchText,
             onSearchChange = state.onSearchChange
         )
@@ -71,7 +71,7 @@ fun HomeScreen(viewModel: HomeScreenViewModel) {
 private fun HomeScreenPreview() {
     AluveryTheme {
         Surface {
-            HomeScreen(HomeSreenUIState(sampleSections))
+            HomeScreen(HomeScreenUIState(sampleSections))
         }
     }
 }

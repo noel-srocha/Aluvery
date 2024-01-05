@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import dev.noelsrocha.aluvery.data.daos.ProductDAO
 import dev.noelsrocha.aluvery.ui.components.shared.App
 import dev.noelsrocha.aluvery.ui.screens.HomeScreen
 import dev.noelsrocha.aluvery.ui.viewmodels.HomeScreenViewModel

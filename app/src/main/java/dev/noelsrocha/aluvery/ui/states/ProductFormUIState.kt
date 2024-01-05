@@ -1,8 +1,5 @@
 package dev.noelsrocha.aluvery.ui.states
 
-import dev.noelsrocha.aluvery.models.Product
-import java.math.BigDecimal
-
 data class ProductFormUIState(
     val productName: String = "",
     val productDescription: String = "",

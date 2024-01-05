@@ -17,10 +17,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -33,22 +29,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import dev.noelsrocha.aluvery.R
-import dev.noelsrocha.aluvery.models.Product
 import dev.noelsrocha.aluvery.ui.states.ProductFormUIState
 import dev.noelsrocha.aluvery.ui.viewmodels.ProductFormScreenViewModel
-import java.math.BigDecimal
-import java.text.DecimalFormat
 
 @Composable
 fun ProductFormScreen(
     viewModel: ProductFormScreenViewModel,
-    onSaveClick: (Product) -> Unit = {}
+    onSaveClick: () -> Unit = {}
 ) {
     val state by viewModel.uiState.collectAsState()
     ProductFormScreen(
         state,
         onSaveClick = {
             viewModel.saveProduct()
+            onSaveClick()
         }
     )
 }
@@ -73,8 +67,6 @@ fun ProductFormScreen(
         Spacer(modifier = Modifier)
 
         Text("Creating Product", fontSize = 24.sp, fontWeight = FontWeight(700))
-
-        val formatter = remember { DecimalFormat("#,##") }
 
         if (state.isShowPreview) {
             AsyncImage(

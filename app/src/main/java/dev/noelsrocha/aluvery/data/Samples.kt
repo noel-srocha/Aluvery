@@ -12,13 +12,13 @@ val sampleCandies = listOf(
         description = LoremIpsum(50).values.first()
     ),
     Product(
-        name = "Sorvete",
+        name = "Ice Cream",
         price = BigDecimal("5.99"),
         image = "https://images.pexels.com/photos/1352278/pexels-photo-1352278.jpeg",
         description = LoremIpsum(50).values.first()
     ),
     Product(
-        name = "Bolo",
+        name = "Cake",
         price = BigDecimal("11.99"),
         image = "https://images.pexels.com/photos/291528/pexels-photo-291528.jpeg",
         description = LoremIpsum(50).values.first()
@@ -27,25 +27,25 @@ val sampleCandies = listOf(
 
 val sampleDrinks = listOf(
     Product(
-        name = "Cerveja",
+        name = "Beer",
         price = BigDecimal("5.99"),
         image = "https://images.pexels.com/photos/1552630/pexels-photo-1552630.jpeg",
         description = LoremIpsum(50).values.first()
     ),
     Product(
-        name = "Refrigerante",
+        name = "Soda",
         price = BigDecimal("4.99"),
         image = "https://images.pexels.com/photos/2775860/pexels-photo-2775860.jpeg",
         description = LoremIpsum(50).values.first()
     ),
     Product(
-        name = "Suco",
+        name = "Juice",
         price = BigDecimal("7.99"),
         image = "https://images.pexels.com/photos/96974/pexels-photo-96974.jpeg",
         description = LoremIpsum(50).values.first()
     ),
     Product(
-        name = "Água",
+        name = "Water",
         price = BigDecimal("2.99"),
         image = "https://images.pexels.com/photos/327090/pexels-photo-327090.jpeg",
         description = LoremIpsum(50).values.first()
@@ -54,7 +54,7 @@ val sampleDrinks = listOf(
 
 val sampleProducts: List<Product> = listOf(
     Product(
-        name = "Hamburguer",
+        name = "Hamburger",
         price = BigDecimal("12.99"),
         image = "https://images.pexels.com/photos/1639557/pexels-photo-1639557.jpeg",
         description = LoremIpsum(50).values.first()
@@ -66,7 +66,7 @@ val sampleProducts: List<Product> = listOf(
         description = LoremIpsum(50).values.first()
     ),
     Product(
-        name = "Batata frita",
+        name = "French Fries",
         price = BigDecimal("7.99"),
         image = "https://images.pexels.com/photos/1583884/pexels-photo-1583884.jpeg",
         description = LoremIpsum(50).values.first()
@@ -74,7 +74,7 @@ val sampleProducts: List<Product> = listOf(
 )
 
 val sampleSections = mapOf(
-    "Promoções" to sampleProducts,
-    "Doces" to sampleCandies,
-    "Bebidas" to sampleDrinks
+    "On Sale" to sampleProducts,
+    "Candies" to sampleCandies,
+    "Drinks" to sampleDrinks
 )

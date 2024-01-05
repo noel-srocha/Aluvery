@@ -1,11 +1,8 @@
 package dev.noelsrocha.aluvery.ui.viewmodels
 
-import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.noelsrocha.aluvery.data.daos.ProductDAO
-import dev.noelsrocha.aluvery.data.sampleCandies
-import dev.noelsrocha.aluvery.data.sampleDrinks
 import dev.noelsrocha.aluvery.models.Product
 import dev.noelsrocha.aluvery.ui.states.ProductFormUIState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,15 +14,20 @@ import java.text.DecimalFormat
 
 class ProductFormScreenViewModel : ViewModel() {
     private val productDAO = ProductDAO()
-    private val _uiState: MutableStateFlow<ProductFormUIState> = MutableStateFlow(ProductFormUIState())
+    private val _uiState: MutableStateFlow<ProductFormUIState> =
+        MutableStateFlow(ProductFormUIState())
     val uiState = _uiState.asStateFlow()
 
     init {
         _uiState.update { currentState ->
             currentState.copy(
-                onProductImageUrlChange = { _uiState.value = _uiState.value.copy(productImageUrl = it) },
+                onProductImageUrlChange = {
+                    _uiState.value = _uiState.value.copy(productImageUrl = it)
+                },
                 onProductNameChange = { _uiState.value = _uiState.value.copy(productName = it) },
-                onProductDescriptionChange = { _uiState.value = _uiState.value.copy(productDescription = it) },
+                onProductDescriptionChange = {
+                    _uiState.value = _uiState.value.copy(productDescription = it)
+                },
                 onProductPriceChange = {
                     val formatter = DecimalFormat("#.##")
 
@@ -41,7 +43,7 @@ class ProductFormScreenViewModel : ViewModel() {
                     convertedPrice?.let {
                         _uiState.value = _uiState.value.copy(productPrice = convertedPrice)
                     }
-               },
+                },
             )
         }
     }
@@ -50,7 +52,7 @@ class ProductFormScreenViewModel : ViewModel() {
         _uiState.value.run {
             val convertedPrice = try {
                 BigDecimal(productPrice)
-            } catch(e: IllegalArgumentException) {
+            } catch (e: IllegalArgumentException) {
                 BigDecimal.ZERO
             }
 
