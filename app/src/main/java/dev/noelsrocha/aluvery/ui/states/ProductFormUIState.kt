@@ -3,20 +3,15 @@ package dev.noelsrocha.aluvery.ui.states
 import dev.noelsrocha.aluvery.models.Product
 import java.math.BigDecimal
 
-class ProductFormUIState(
-    var productName: String = "",
-    var productDescription: String = "",
-    var productImageUrl: String = "",
-    var productPrice: String = "",
-    val onSaveClick: (product: Product) -> Unit = {}
+data class ProductFormUIState(
+    val productName: String = "",
+    val productDescription: String = "",
+    val productImageUrl: String = "",
+    val productPrice: String = "",
+    val onProductNameChange: (value: String) -> Unit = {},
+    val onProductDescriptionChange: (value: String) -> Unit = {},
+    val onProductImageUrlChange: (value: String) -> Unit = {},
+    val onProductPriceChange: (value: String) -> Unit = {},
 ) {
-    fun isImageUrlValid(): Boolean = productImageUrl.isNotBlank()
-
-    fun convertPrice(): BigDecimal {
-        return try {
-            BigDecimal(productPrice)
-        } catch (ex: NumberFormatException) {
-            BigDecimal.ZERO
-        }
-    }
+    val isShowPreview: Boolean get() = productImageUrl.isNotBlank()
 }
